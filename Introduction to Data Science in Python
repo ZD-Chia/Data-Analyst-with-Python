@@ -1,0 +1,56 @@
+#07 Mar 2023
+  #functions pandas
+  import pandas as pd
+  FROM matplotlib import pyplot as plt
+  
+  df = pd.read_csv('File name')
+  
+  plt.plot(x_values, y_values)
+  
+  plt.show()
+  
+  plate = ('FRW****')
+  lookup_plate = (plate)
+  
+  credit_records = pd.read_csv("file name")
+  credit_records.head() #show first 5 rows
+  credit_records.info() # check the info of the DF, how many column and row in total.
+  
+  #select column
+  suspect = credit_records['suspect']
+  
+  price = credit_records.price  #without space or symbol
+  
+  #select row
+  greater_than_2 = mpr[mpr.Age >2]
+  still_missing = mpr[mpr["Dog breed'] != 'Poodle']
+  
+  #Matplotlib
+  from matplotlib import pyplot as plt
+  plt.plot(x_values, y_values) 
+  plt.plot(ransom.letter, ransom.frequency)
+  plt.show() #show the chart
+  
+  #adding text to plots
+  plt.xlabel('xlabel')
+  plt.ylabel('ylabel')
+  plt.title('tile')
+  plt.show()
+  
+  #legends
+  plt.plot(x_values, y_values, label = 'xy')
+  plt.legend()
+  
+  #arbitrary text
+  plt.text(xcoord, 
+      ycoord,
+      "Text msg")
+  #modifying text
+    #change font size
+    plt.title("Plot title", fontsize = 20)
+    #change font color
+    plt.legend(color="green")
+    
+  #  
+ 
+  
