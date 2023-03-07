@@ -1,0 +1,77 @@
+#07 MAr 23
+  #Matplotlib
+  #ticks
+  plt.yticks([0,2,4,6,8,10],
+              ['0','2B','4B','6B','8B','10B'])
+  #ADD more daata
+  year = [1800, 1850, 1900] + year
+  pop = [1.0, 1.252, 1.650] + pop
+  
+  
+  #Dictionaries & Pandas
+  #list
+  pop=[30.55, 2.77,393.1]
+  countries=["afghanistan", "albania", "algeria"]
+  ind_alb=countries.index("albania")
+  ind_alb
+  
+  #dictionaries
+  world={"afghanistan":30.55, "albania":2.77, "algeria":393.1}
+  world["albania"]
+  
+  #Dictionaries part2
+  world["sealand"] = 0.000027
+  world #you will see new key and value set added to the dictionary
+  "sealand" in world
+  
+  #input world["sealand"] = 0.000028 to update the value in the dict
+  #del(world["sealnd"])
+  world #"sealand" set was deleted
+  
+  #Pandas 
+  brics
+  dict = {
+      "country":["Brazil", "Russia","India","China","South Africa"],
+      "capital":["Brasilia","Moscow","New Delhi","Beijing","Pretoria"],
+      "area":[8.516,17.10,3.286,9.597,1.221]
+      "population":[200.4,143.5,1252,1357,52.98]}
+  
+  importpandas as pd
+  brics=pd.DataFrame(dict)
+  
+  #setting index to the list
+  brics.index = ["BR","RU","IN","CH","SA"]
+  brics
+  
+  brics = pd.read_csv("path/to/brics.csv", index_col = 0)
+  brics
+  
+  
+ #pandas part2
+ brics["country"]
+ type(brics["country"])
+ brics[["coutnry"]]
+ brics[["coutnry", "capitals]]
+ 
+ brics[1:4] #0,1,2,3 row
+ 
+ #loc (label-based)
+ brics.loc[["RU,"IN","CH"]] #show all column data in each row
+ brics.loc[["RU,"IN","CH"], ["country","capital"]] #then it will only show coutnry and capital column for each row
+ brics.loc[:, ["country","capital"]] #select all row 
+ 
+ #iloc(integer position-based)
+ brics.iloc[[1]] #use the row position to select the row
+ brics.iloc[[1,2,3], [0,1]] #first 2 column data select for first 3 rows
+ brics.iloc[:, [0,1]] #select all row
+ 
+ 
+ #Logic, Control Flow and Filtering
+ #numberic comparisons
+ 2 < 3 #True
+ 2 == 3 #False
+ 
+ 
+      
+  
+  
