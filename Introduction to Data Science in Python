@@ -105,7 +105,7 @@
  plt.legend()
  plt.show()
          
-#Histogram
+#Histogram  #help(plt.hist)
 plt.hist(gravel.mass) #just dataset
 plt.show()
 
