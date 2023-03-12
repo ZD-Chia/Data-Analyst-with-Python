@@ -1,4 +1,5 @@
 #09 March 2023
+ #1 Subsetting and sorting
   #inspecting DF
   # Print the head of the homelessness data
     print(homelessness.head())
@@ -41,7 +42,7 @@
  # Filter for rows in the Mojave Desert states
  mojave_homelessness = homelessness[homelessness["state"].isin(canu)] 
  
- #new columns
+ #adding new columns
  dogs["height_m"] = dogs["height_cm"]/100
  print(dogs)
  
@@ -69,6 +70,10 @@
  result = high_homelessness_srt[["state", "indiv_per_10k"]]
  print(result)
  
+ 
+ 
+ 
+ #2 Aggregating and grouping, #summary statistics
  # Print the info about the sales DataFrame
  print(sales.info())
 
@@ -168,7 +173,7 @@
  sales_by_type_is_holiday = sales.groupby(["type", "is_holiday"])["weekly_sales"].sum()
  print(sales_by_type_is_holiday)
  
-
+ 
 
  import numpy as np
  # For each store type, aggregate weekly_sales: get min, max, mean, and median
@@ -186,6 +191,7 @@
  dogs.pivot_table(values = "weight-lag", index="color", columns="breed", fill_value = 0, margins = True) #margin can let us to see the mean of the row.exclude the 0 value
  
  
+ 
  # Pivot for mean weekly_sales for each store type
  mean_sales_by_type = sales.pivot_table(values='weekly_sales', index='type')
  # Pivot for mean and median weekly_sales for each store type
@@ -200,7 +206,9 @@
  print(sales.pivot_table(values="weekly_sales", index="department", columns="type", fill_value=0, margins=True))
  
  
- #Explicit indexes
+ 
+ 
+ #3 Explicit indexes
  dogs_ind = dogs.set_index("name")
  dogs_ind.reset_index()
  dogs_ind.reset_index(drop=True) #remove entire dog name 
@@ -273,7 +281,7 @@
  dogs.loc["2014":"2016"]
  dogs.iloc[2:5, 1:4]
  
- 
+  
  # Sort the index of temperatures_ind
  temperatures_srt = temperatures_ind.sort_index()
 
@@ -321,4 +329,240 @@
 
  # Use slicing in both directions at once
  print(temperatures.iloc[0:5, 2:4])
+ 
+ 
+ 
+ #Pivoting the dog pack
+ dogs_height_by_breed_vs_color = dogs_pack.pivot_table("height_cm", index = "breed", columns="color")
+ dogs_height_by_breed_vs_color.loc["Chow Chow" : "Poodle"]
+ dogs_height_by_breed_vs_color.mean(axis="index") #calculate mean across row which mean calculate mean for each color
+ dogs_height_by_breed_vs_color.mean(axis="columns") #calculate mean across columns
+ 
+ #Pivot temperature by city and year
+ # Add a year column to temperatures
+ temperatures["year"] = temperatures["date"].dt.year
+
+ # Pivot avg_temp_c by country and city vs year
+ temp_by_country_city_vs_year = temperatures.pivot_table("avg_temp_c", index=["country","city"], columns="year")
+
+ # See the result
+ print(temp_by_country_city_vs_year)
+
+
+ # Subset for Egypt to India
+ temp_by_country_city_vs_year.loc["Egypt":"India"]
+
+ # Subset for Egypt, Cairo to India, Delhi
+ temp_by_country_city_vs_year.loc[("Egypt", "Cairo") : ("India", "Delhi")]
+
+ # Subset for Egypt, Cairo to India, Delhi, and 2005 to 2010
+ temp_by_country_city_vs_year.loc[("Egypt", "Cairo"):("India","Delhi"), "2005":"2010"]
+ 
+ 
+ # Get the worldwide mean temp by year
+ mean_temp_by_year = temp_by_country_city_vs_year.mean()
+
+ # Filter for the year that had the highest mean temp
+ print(mean_temp_by_year[mean_temp_by_year ==mean_temp_by_year.max()])
+
+ # Get the mean temp by city
+ mean_temp_by_city = temp_by_country_city_vs_year.mean(axis="columns")
+
+ # Filter for the city that had the lowest mean temp
+ print(mean_temp_by_city[mean_temp_by_city==mean_temp_by_city.min()])
+
+
+
+
+ #4 visualiazing the data
+ import matplotlib.pyplot as plt
+ dog_pack["height_cm"].hist()
+ plt.show()
+ 
+ avg_weight_by_breed = dog_pack.groupby("breed")["weight_kg"].mean()
+ avg_weight_by_breed.plot(kind="bar", title="Mean Weight by Dog Breed") #create bar lot from mean weight
+ 
+ 
+ #line plots
+ sully.head()
+ sully.plot(x="data", y="weight_kg", kind="line", rot =45) #rotate the label angel
+ 
+ #scatter plots
+ dog_packs_plot(x="height_cm", y = "weight_kg", kind ="scatter")
+ 
+ #Layering plots
+ dog_pack[dog_pack["sex"]=="F"]["height_cm"].hist(alpha=0.7)
+ dog_pack[dog_pack["sex"]=="M"]["height_cm"].hist(alpha=0.7)
+ plt.legend(["F", "M"])
+ plt.show()
+ 
+ 
+ # Import matplotlib.pyplot with alias plt
+ import matplotlib.pyplot as plt
+
+ # Look at the first few rows of data
+ print(avocados.head())
+
+ # Get the total number of avocados sold of each size
+ nb_sold_by_size = avocados.groupby("size")["nb_sold"].sum()
+
+ # Create a bar plot of the number of avocados sold by size
+ nb_sold_by_size.plot(kind="bar")
+ plt.show()
+ 
+ # Get the total number of avocados sold on each date
+ nb_sold_by_date = avocados.groupby("date")["nb_sold"].sum()
+
+ # Create a line plot of the number of avocados sold by date
+ nb_sold_by_date.plot(kind="line")
+ plt.show()
+ 
+ # Scatter plot of avg_price vs. nb_sold with title
+ avocados.plot(x="nb_sold", y="avg_price", kind="scatter",title="Number of avocados sold vs. average price")
+ plt.show()
+ 
+ 
+ # Histogram of conventional avg_price 
+ avocados[avocados["type"]=="conventional"]["avg_price"].hist(alpha=0.5, bins=20)
+
+ # Histogram of organic avg_price
+ avocados[avocados["type"]=="organic"]["avg_price"].hist(alpha=0.5, bins=20)
+
+ # Add a legend
+ plt.legend(["conventional", "organic"])
+ plt.show()
+ 
+ 
+ #Missing Values
+ #Detecting missing values
+ dogs.isna() #u get True boolean value in missing data 
+ dogs.isna().any() 
+ dogs.isna().sum()
+ dogs.isna().sum().plot(kind="bar")
+ plt.show()
+ 
+ dogs.dropna()
+ dogs.fillna(0)
+ 
+ 
+ # Import matplotlib.pyplot with alias plt
+ import matplotlib.pyplot as plt
+
+ # Check individual values for missing values
+ print(avocados_2016.isna())
+
+ # Check each column for missing values
+ print(avocados_2016.isna().any())
+
+ # Bar plot of missing values by variable
+ avocados_2016.isna().sum().plot(kind="bar")
+ plt.show()
+ 
+ 
+ # Remove rows with missing values
+ avocados_complete = avocados_2016.dropna()
+ # Check if any columns contain missing values
+ print(avocados_complete.isna().any())
+ 
+ 
+ # List the columns with missing values
+ cols_with_missing = ["small_sold", "large_sold", "xl_sold"]
+
+ # Create histograms showing the distributions cols_with_missing
+ avocados_2016[cols_with_missing].hist()
+ plt.show()
+ # Fill in missing values with 0
+ avocados_filled = avocados_2016.fillna(0)
+
+ # Create histograms of the filled columns
+ avocados_filled[cols_with_missing].hist()
+ 
+ 
+ #Creating Data Frame
+ my_dict={ 
+          "key1": value1,
+          "key2":value2,
+          "key3":value3
+          }
+  my_dict["key1"] #show the value of key1
+  
+  #List of dictionaries - by row
+  list_of_dicts = [
+      {"name":"Ginger", "breed":"Dachshund", "height_cm":22,
+      "weight_kg":10, "date_of_birth":"2019-03-14"},
+      {"name":"Scout", "breed":"Dalmatian", "height_cm":59,
+      "weight_kg":25, "date_of_birth":"2019-08-19"}
+  ]
+  new_dogs = pd.DataFrame(list_of_dicts)
+  
+  #by column
+  dict_of_lists = {
+      "name": ["Ginger", "Scout"],
+      "breed" : ["Dachshund","Dalmatian"],
+      "height_cm":[22,59],
+      "weight_kg":[10,25],
+      "date_of_birth": ["2019-03-14","2019-08-19"]
+   }
+   new_dogs = pd.DataFrame(dict_of_lists)
+  
+ #List of dictionaries  
+ # Create a list of dictionaries with new data
+ avocados_list = [
+    {"date": "2019-11-03", "small_sold": 10376832, "large_sold": 7835071},
+    {"date": "2019-11-10", "small_sold": 10717154, "large_sold": 8561348},
+ ]
+
+ # Convert list into DataFrame
+ avocados_2019 = pd.DataFrame(avocados_list)
+
+ # Print the new DataFrame
+ print(avocados_2019)
+ 
+ 
+ #Dictionary of lists
+ # Create a dictionary of lists with new data
+ avocados_dict = {
+  "date": ["2019-11-17", "2019-12-01"],
+  "small_sold": [10859987, 9291631],
+  "large_sold": [7674135, 6238096]
+ }
+
+ # Convert dictionary into DataFrame
+ avocados_2019 = pd.DataFrame(avocados_dict)
+ print(avocados_2019)
+ 
+ 
+ #Reading and writing CSVs
+ import pandas aas pd 
+ new_dogs= pd.read_csv("new_dogs.csv")
+ 
+ #DF manipulation
+ new_dogs["bmi"] = new_dogs["weight_kg"] / (new_dogs["height_cm"] / 100) **2
+ 
+ #DF to CSV
+ new_dogs.to_csv("new_dogs_with_bmi.csv")
+ 
+ 
+ # Read CSV as DataFrame called airline_bumping
+ airline_bumping = pd.read_csv("airline_bumping.csv")
+ # Take a look at the DataFrame
+ print(airline_bumping.head())
+ # For each airline, select nb_bumped and total_passengers and sum
+ airline_totals = airline_bumping.groupby("airline")[["nb_bumped", "total_passengers"]].sum()
+ #per 10k
+ airline_totals["bumps_per_10k"] = airline_totals["nb_bumped"] / airline_totals["total_passengers"] * 10000
+ 
+ 
+ # Create airline_totals_sorted
+ airline_totals_sorted = airline_totals.sort_values("bumps_per_10k", ascending = False)
+
+ # Print airline_totals_sorted
+ print(airline_totals_sorted)
+
+ # Save as airline_totals_sorted.csv
+ airline_totals_sorted.to_csv("airline_totals_sorted.csv")
+ 
+ 
+
+ 
  
