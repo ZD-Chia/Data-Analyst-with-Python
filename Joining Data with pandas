@@ -239,6 +239,18 @@
   
   
   
+  Reshaping data with .melt()
+  social_fin_tall = social_fin.melt(id_vars=['financial','company'],
+  					value_vars=['2018','2017'],
+					var_name=['year'],value_name='dollars')
+  print(social_fin_tall.head(10))
+  
+  
+  
+  
+  
+  
+  
   
   
   
