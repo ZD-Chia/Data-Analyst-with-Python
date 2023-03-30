@@ -39,6 +39,193 @@
   # Group by country, select consumption column, and compute mean and median
   print(be_and_usa.groupby(be_and_usa["country"])["consumption"].agg([np.mean,np.median]))
   
+  import matplotlib.pyplot as plt
+
+  # Subset for food_category equals rice
+  rice_consumption = food_consumption[food_consumption['food_category'] == 'rice']
+
+  # Histogram of co2_emission for rice and show plot
+  rice_consumption.co2_emission.hist()
+  plt.show()
+  
+  
+  ##Measures of center
+  #median
+  np.median(msleep["sleep_total"]
+  
+  #mode
+  import statistics
+  statistics.mode(msleep["vore'])
+  
+  #adding an outlier
+  msleep[msleep['vore'] == 'insecti']['sleep_total'].agg([np.mean, np.median])
+  
+  
+  
+  #Mean and Median
+  # Import numpy with alias np
+  import numpy as np
+
+  # Filter for Belgium
+  be_consumption = food_consumption[food_consumption["country"] == 'Belgium']
+
+  # Filter for USA
+  usa_consumption = food_consumption[food_consumption["country"] == "USA"]
+
+  # Calculate mean and median consumption in Belgium
+  print(np.mean(be_consumption["consumption"]))
+  print(np.median(be_consumption["consumption"]))
+
+  # Calculate mean and median consumption in USA
+  print(np.mean(usa_consumption["consumption"]))
+  print(np.median(usa_consumption["consumption"]))
+  
+  
+  
+  # Import numpy as np
+  import numpy as np
+
+  # Subset for Belgium and USA only
+  be_and_usa = food_consumption[(food_consumption["country"]=="Belgium") | (food_consumption["country"]=="USA")]
+
+  # Group by country, select consumption column, and compute mean and median
+  print(be_and_usa.groupby(be_and_usa["country"])["consumption"].agg([np.mean,np.median]))
+  
+  # Calculate mean and median of co2_emission with .agg()
+  print(rice_consumption.agg([np.mean, np.median]))
+  
+  
+  
+  #Measures of spread
+  #Calculating variance
+  #1.substract mean from each data point
+  dists = msleep['sleep_total']-np.mean(msleep['sleep_total'])
+  print(dists)
+  
+  #2. Square each distance
+  sq_dists = dists **2
+  print(sq_dists)
+  
+  #3. sum squared distances
+  sum_sq_dists = np.sum(sq.dists)
+  print(sum_sq_dists)
+  
+  #4. divide by number of data points -1
+  variance = sum_sq_dists/ (83-1)
+  print(variance)
+  
+  ##calculate in 1 step
+  np.var(msleep['sleep_total'], ddof=1)
+  
+  #without ddof=1, population variance is calculated instead of sample variance:
+  np.var(msleep['sleep_total'])
+  
+  
+  
+  #Standard Deviation
+  np.sqrt(np.var(msleep['sleep_total'], ddof =1))
+  
+  np.std(msleep['sleep_total'], ddof=1)
+  
+  
+  #Mean absolute deviation 
+  dists= msleep['sleep_total'] - mean(msleep$sleep_total)
+  np.mean(np.abs(dists))
+  
+  
+  #Quantiles
+  np.quantile(msleep['sleep_total'], 0.5)
+  0.5 quantile = median
+  
+  np.quantile(msleep['sleep_total'],[0,0.25,0.5,0.75,1])
+  
+  #boxplot use quantiles
+  import matplotlib.pyplot as plt
+  plt.boxplot(msleep['sleep_total'])
+  plt.show()
+  
+  #Quantiles using np.linspace()
+  np.quantile(msleep['sleep_total'],[0,0.2,0.4,0.6,0.8,1])
+  
+  np.linspace(start, stop, num)
+  np.quantile(msleep['sleep_total'], np.linspace(0,1,5))
+  
+  #Interquartile range (IQR)
+  np.quantile(msleep['sleep_total'], 0.75) - np.quantile(msleep['sleep_total'], 0.25)
+  
+  from scipy.stats import iqr
+  iqr(msleep['sleep_total'])
+  
+  
+  #Outliers data>Q1 -1.5 x IQR or data <Q3 +1.5 xIQR
+  #find outliers
+  from scipy.stats import iqr
+  iqr = iqr(msleep['bodywt'])
+  lower_threshold = np.quantile(msleep['bodywt'], 0.25) -1.5 *iqr
+  upper_threshold = np.quantile(msleep['bodywt'], 0.75) -1.5 *iqr
+  
+  msleep[(msleep['bodywt']) < lower_threshold) |(msleep['bodywt']) > upper_threshold)]
+  
+  
+  #All in one go
+  msleep['bodywt'].describe()
+  
+  
+  #Quartiles, quantiles, and quintiles
+  # Calculate the quartiles of co2_emission
+  print(np.quantile(food_consumption["co2_emission"],np.linspace(0,1,5)))
+  
+  # Calculate the quintiles of co2_emission
+  print(np.quantile(food_consumption["co2_emission"], np.linspace(0,1,6)))
+  
+ 
+  
+  
+  # Print variance and sd of co2_emission for each food_category
+  print(food_consumption.groupby("food_category")["co2_emission"].agg([np.var, np.std]))
+
+  # Import matplotlib.pyplot with alias plt
+  import matplotlib.pyplot as plt
+
+  # Create histogram of co2_emission for food_category 'beef'
+  food_consumption[food_consumption["food_category"] == "beef"].co2_emission.hist()
+  # Show plot
+  plt.show()
+
+  # Create histogram of co2_emission for food_category 'eggs'
+  food_consumption[food_consumption["food_category"] == "eggs"].co2_emission.hist()
+  # Show plot
+  plt.show()
+  
+  
+  
+  # Calculate total co2_emission per country: emissions_by_country
+  emissions_by_country = food_consumption.groupby("country")["co2_emission"].sum()
+  print(emissions_by_country)
+   
+
+  # Compute the first and third quartiles and IQR of emissions_by_country
+  q1 = np.quantile(emissions_by_country, 0.25)
+  q3 = np.quantile(emissions_by_country, 0.75) 
+  iqr = q3-q1
+  
+  # Calculate the lower and upper cutoffs for outliers
+  lower = np.quantile(emissions_by_country, 0.25) - 1.5* iqr
+  upper = np.quantile(emissions_by_country, 0.75) + 1.5* iqr
+  **OR
+  # Calculate the lower and upper cutoffs for outliers
+  lower = q1 - 1.5 * iqr
+  upper = q3 + 1.5 * iqr
+
+  # Subset emissions_by_country to find outliers
+  outliers = emissions_by_country[(emissions_by_country < lower) | (emissions_by_country >upper)]
+  print(outliers)
+  
+  
+  
+  
+  
+  
   
   
   
