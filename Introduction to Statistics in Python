@@ -239,14 +239,30 @@
  sample_without_replacement = amir_deals.sample(5, replace = False)
  print(sample_without_replacement)
  
- # Sample 5 deals with replacement
+  # Sample 5 deals with replacement
  sample_with_replacement = amir_deals.sample(5, replace = True)
  print(sample_with_replacement)
-  
  
  
-  
-  
+ ##Creating a probability distribution 
+ # Create probability distribution
+ size_dist = restaurant_groups['group_size'] / restaurant_groups.shape[0]
+
+ # Reset index and rename columns
+ size_dist = size_dist.reset_index()
+ size_dist.columns = ['group_size', 'prob']
+ print(size_dist)
+ 
+ # Calculate expected value
+ expected_value = (size_dist["group_size"] * size_dist["prob"]).sum()
+ print(expected_value)
+ 
+ # Subset groups of size 4 or more
+ groups_4_or_more = size_dist[size_dist["group_size"]>= 4]
+
+ # Sum the probabilities of groups_4_or_more
+ prob_4_or_more = groups_4_or_more['prob'].sum()
+ print(prob_4_or_more)
   
   
   
